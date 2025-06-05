@@ -85,7 +85,7 @@ export default function CustomCombobox({
                                         selected ? 'font-medium' : 'font-normal'
                                     )}
                                 >
-                                    {item}
+                                    {item === null ? "Select an option" : item}
                                 </span>
                                 {selected ? (
                                     <span

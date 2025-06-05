@@ -149,7 +149,7 @@ export default function AuthForm() {
             <div className="text-center text-sm">
                 {view === 'login' ? (
                     <p className="text-text-secondary">
-                        Don't have an account?{' '}
+                        Don&apos;t have an account?{' '}
                         <button
                             className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer"
                             onClick={() => setView('signup')}

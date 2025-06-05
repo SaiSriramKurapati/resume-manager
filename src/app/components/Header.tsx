@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { supabase } from "../lib/supabaseClient";
-import Button from "./Button";
 import { Menu, MenuItem, Transition } from '@headlessui/react';
 import { ChevronDownIcon, UserCircleIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/20/solid";
 import { useStore } from "@/store/useStore";

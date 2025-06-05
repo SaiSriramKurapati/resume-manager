@@ -1,9 +1,6 @@
 import '../globals.css'; // Import global styles (already imported in root, but good for standalone testing)
-import { Inter } from 'next/font/google';
 import { AlertProvider } from '../context/AlertContext';
 import AlertContainer from '../components/AlertContainer';
-
-const inter = Inter({ subsets: ['latin'] });
 
 // This layout does NOT include the Header and renders directly within the root body
 export default function AuthLayout({ children }: { children: React.ReactNode }) {

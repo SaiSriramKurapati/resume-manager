@@ -12,7 +12,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     // Fetch resumes when this layout mounts (only for pages within (main))
     useEffect(() => {
         fetchResumes();
-    }, [fetchResumes]);
+    }, [fetchResumes()]);
 
     useEffect(() => {
         fetchProfile();

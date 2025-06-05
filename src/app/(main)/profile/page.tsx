@@ -4,15 +4,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/app/lib/supabaseClient';
 import Button from '@/app/components/Button';
 import Input from '@/app/components/Input';
-import { useRouter } from 'next/router';
 import { useStore } from '@/store/useStore';
 
-interface Profile {
-    id: string;
-    username: string;
-    email: string;
-    created_at: string;
-}
 
 export default function ProfilePage() {
     const profile = useStore(state => state.profile);

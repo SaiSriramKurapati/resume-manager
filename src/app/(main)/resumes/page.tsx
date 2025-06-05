@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/app/lib/supabaseClient";
 import EditResumeModal from "@/app/modals/EditResumeModal";
 import PreviewResumeModal from "@/app/modals/PreviewResumeModal";
-import Link from "next/link";
 import TableCheckbox from "@/app/components/TableCheckbox";
 import Button from "@/app/components/Button";
 import Tippy from "@tippyjs/react";
@@ -52,7 +51,6 @@ export default function ResumesPage() {
 
     // Selection logic
     const isAllSelected = filteredResumes.length > 0 && selectedIds.length === filteredResumes.length;
-    const isIndeterminate = selectedIds.length > 0 && selectedIds.length < filteredResumes.length;
 
     function toggleSelectAll() {
         if (isAllSelected) setSelectedIds([]);

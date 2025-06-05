@@ -24,15 +24,12 @@ export default function Dashboard() {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [deleteIds, setDeleteIds] = useState<string[]>([]);
     const [deleteLoading, setDeleteLoading] = useState(false);
-    const [deleteError, setDeleteError] = useState<string | null>(null);
     const { showAlert } = useAlert();
 
     const resumes = useStore((state) => state.resumes);
     const isLoading = useStore((state) => state.isLoading);
-    const error = useStore((state) => state.error);
     const fetchResumes = useStore((state) => state.fetchResumes);
     const deleteResume = useStore((state) => state.deleteResume);
-    const updateResume = useStore((state) => state.updateResume);
 
     useEffect(() => {
         fetchResumes();
@@ -65,7 +62,6 @@ export default function Dashboard() {
 
     // Selection logic
     const isAllSelected = resumes.length > 0 && selectedIds.length === resumes.length;
-    const isIndeterminate = selectedIds.length > 0 && selectedIds.length < resumes.length;
 
     function toggleSelectAll() {
         if (isAllSelected) setSelectedIds([]);
@@ -78,14 +74,12 @@ export default function Dashboard() {
 
     function openDeleteModal(ids: string[]) {
         setDeleteIds(ids);
-        setDeleteError(null);
         setDeleteModalOpen(true);
     }
 
     function closeDeleteModal() {
         setDeleteModalOpen(false);
         setDeleteIds([]);
-        setDeleteError(null);
     }
 
     async function handleDelete() {
