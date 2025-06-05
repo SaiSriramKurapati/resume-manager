@@ -104,6 +104,7 @@ export default function Dashboard() {
 
         } catch (error) {
             showAlert("An error occured while deleting", 'error');
+            console.error(error);
         } finally {
             setDeleteLoading(false);
         }

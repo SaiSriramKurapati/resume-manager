@@ -1,45 +1,27 @@
 import { Fragment, useState } from 'react';
 import { Combobox, Transition } from '@headlessui/react';
 import clsx from 'clsx';
-import { useAlert } from '../context/AlertContext'; // Import useAlert
+import { useAlert } from '../context/AlertContext';
 
 interface MultiSelectComboboxProps {
-  items: string[]; // All possible labels
-  value: string[]; // Currently selected labels
-  onChange: (value: string[]) => void; // Callback with updated selected labels
+  items: string[];
+  value: string[];
+  onChange: (value: string[]) => void;
   placeholder?: string;
   label?: string;
   disabled?: boolean;
-  maxItems?: number; // Add maxItems prop
-  allowCreate?: boolean; // Add allowCreate prop
+  maxItems?: number;
+  allowCreate?: boolean;
 }
 
 export default function MultiSelectCombobox({ items, value, onChange, placeholder, label, disabled, maxItems, allowCreate = false }: MultiSelectComboboxProps) {
   const [query, setQuery] = useState('');
-  const { showAlert } = useAlert(); // Access showAlert function
-  const [isCreating, setIsCreating] = useState(false);
+  const { showAlert } = useAlert();
 
   // Filter items based on query and exclude already selected items from the main list
   const filteredItems = query === ''
     ? items.filter(item => !value.includes(item))
     : items.filter(item => !value.includes(item) && item.toLowerCase().includes(query.toLowerCase()));
-
-  // Handle creating a new item
-  const handleCreate = () => {
-    if (query.trim() === '') return;
-    
-    // Check if adding more items would exceed the limit
-    if (maxItems !== undefined && value.length >= maxItems) {
-      showAlert(`Maximum ${maxItems} labels allowed.`, 'warning');
-      return;
-    }
-
-    // Add the new item to the selection
-    const newValue = [...value, query.trim()];
-    onChange(newValue);
-    setQuery('');
-    setIsCreating(false);
-  };
 
   // Correctly handle the array of selected items from Headless UI
   const handleHeadlessSelect = (selectedItems: string[]) => {
@@ -50,16 +32,13 @@ export default function MultiSelectCombobox({ items, value, onChange, placeholde
     }
     onChange(selectedItems);
     setQuery(''); // Clear query after selection
-    setIsCreating(false);
   };
 
   return (
     <Combobox value={value} onChange={handleHeadlessSelect} multiple disabled={disabled}>
       {label && <Combobox.Label className="block text-sm font-medium mb-1 text-text-primary">{label}</Combobox.Label>}
       <div className="relative mt-1">
-        {/* Adjusted input container to show selected labels as chips */}
         <div className="relative w-full cursor-default overflow-hidden rounded text-left shadow-md focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 flex flex-wrap items-center py-1 px-2 backdrop-blur-sm border border-gray-200/50 shadow-sm">
-          {/* Display selected labels as chips */}
           {value.map((item) => (
             <span
               key={item}
@@ -69,8 +48,8 @@ export default function MultiSelectCombobox({ items, value, onChange, placeholde
               <button
                 type="button"
                 onClick={(e) => {
-                  e.stopPropagation(); // Prevent triggering Combobox selection
-                  handleHeadlessSelect(value.filter(selectedItem => selectedItem !== item)); // Remove this label
+                  e.stopPropagation();
+                  handleHeadlessSelect(value.filter(selectedItem => selectedItem !== item));
                 }}
                 className="ml-1 text-blue-600 hover:text-blue-900 hover:cursor-pointer"
                 aria-label={`Remove ${item}`}
@@ -83,20 +62,18 @@ export default function MultiSelectCombobox({ items, value, onChange, placeholde
           <Combobox.Input
             className="flex-grow border-none py-1 pl-1 pr-10 text-sm leading-5 text-text-primary focus:ring-0 focus:outline-none bg-transparent"
             onChange={(event) => setQuery(event.target.value)}
-            placeholder={value.length === 0 ? placeholder : ''} // Show placeholder only if no labels selected
-            displayValue={() => query} // Use query directly to ensure it updates
+            placeholder={value.length === 0 ? placeholder : ''}
+            displayValue={() => query}
             disabled={disabled}
             onKeyDown={(e) => {
               if ((e.key === 'Backspace' || e.key === 'Delete') && query === '' && value.length > 0) {
                 e.preventDefault();
-                // Remove the last label
                 const newValue = value.slice(0, -1);
                 onChange(newValue);
               }
             }}
           />
           <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2 hover:cursor-pointer top-0 bottom-0 mt-auto mb-auto">
-            {/* Chevron icon */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5 text-gray-400" aria-hidden="true">
               <path fillRule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.29a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clipRule="evenodd" />
             </svg>
@@ -121,7 +98,7 @@ export default function MultiSelectCombobox({ items, value, onChange, placeholde
                   )
                 }
               >
-                Create "{query}"
+                Create &quot;{query}&quot;
               </Combobox.Option>
             )}
             {filteredItems.length === 0 ? (

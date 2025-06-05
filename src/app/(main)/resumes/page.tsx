@@ -92,6 +92,7 @@ export default function ResumesPage() {
             setSelectedIds(ids => ids.filter(id => !deleteIds.includes(id)));
         } catch (error) {
             showAlert("An error occurred while deleting", 'error');
+            console.error(error);
         } finally {
             setDeleteLoading(false);
         }

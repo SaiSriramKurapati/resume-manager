@@ -120,7 +120,7 @@ export default function CustomCombobox({
                         <span
                             className={clsx('block truncate', active ? 'font-medium' : 'font-normal')}
                         >
-                            Create "{query}"
+                            Create &quot;{query}&quot;
                         </span>
                      )}
                  </Combobox.Option>

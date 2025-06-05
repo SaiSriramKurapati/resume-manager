@@ -61,6 +61,7 @@ export default function EditResumeModal({ open, onClose, resume, onSave }: EditR
             onSave();
         } catch (error) {
             setError("An unexpected error occurred");
+            console.error(error);
         } finally {
             setLoading(false);
         }
