@@ -24,3 +24,20 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Tippy.js Tooltip Styling */
+.tippy-box {
+  background-color: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem; /* equivalent to text-sm */
+}
+
+.tippy-content {
+  /* No specific styling needed here unless you want to override */
+}
+
+.tippy-arrow {
+  color: #333;
+}
