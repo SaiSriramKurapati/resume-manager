@@ -1,16 +1,6 @@
 import { create, StateCreator } from 'zustand';
 import { supabase } from '@/app/lib/supabaseClient';
 
-interface Label {
-    id: string;
-    name: string;
-}
-
-interface Category {
-    id: string,
-    name: string;
-}
-
 interface Profile {
     id: string;
     username: string;
@@ -35,7 +25,6 @@ interface StoreState {
     isLoading: boolean;
     error: string | null;
     profile: Profile | null;
-
 
     // Actions
     fetchResumes: () => Promise<void>;
