@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect, DragEvent, ChangeEvent } from "react";
+import { useState, DragEvent, ChangeEvent } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { v4 as uuidv4 } from "uuid";
 import Button from "./Button";
-import Input from "./Input";
 import CustomCombobox from "./Combobox";
 import { useAlert } from '../context/AlertContext';
 import clsx from "clsx";
@@ -12,7 +11,6 @@ import { DocumentIcon } from '@heroicons/react/24/outline';
 import Tippy from "@tippyjs/react";
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useStore } from "@/store/useStore";
-import MultiSelectCombobox from "./MultiSelectCombobox";
 
 export default function ResumeUploadForm({ onUpload }: { onUpload: () => void }) {
     const [file, setFile] = useState<File | null>(null);

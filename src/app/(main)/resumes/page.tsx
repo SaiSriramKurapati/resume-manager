@@ -30,10 +30,7 @@ export default function ResumesPage() {
     const { showAlert } = useAlert();
 
     // Get store state and actions
-    const { data: resumes, isLoading } = useStore((state) => ({
-        data: state.resumes,
-        isLoading: state.isLoading
-    }));
+    const resumes = useStore(state => state.resumes);
     const uniqueCategories = useStore(state => state.uniqueCategories);
     const uniqueLabels = useStore(state => state.uniqueLabels);
     const fetchResumes = useStore(state => state.fetchResumes);

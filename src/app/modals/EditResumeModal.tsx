@@ -22,51 +22,49 @@ export default function EditResumeModal({ open, onClose, resume, onSave }: EditR
     const [category, setCategory] = useState("");
     const [labels, setLabels] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const { showAlert } = useAlert();
 
     const uniqueCategories = useStore((state) => state.uniqueCategories);
     const uniqueLabels = useStore((state) => state.uniqueLabels);
     const updateResume = useStore((state) => state.updateResume);
-
-
     
-
     useEffect(() => {
         if (resume) {
             setCategory(resume.category || "");
             setLabels(resume.labels || []);
+            setError(null);
         }
     }, [resume, open]);
 
-    const handleSave = async () => {
+    async function handleSave() {
+        if (!resume) return;
         setLoading(true);
+        setError(null);
+        
         try {
-            const { error: updateError } = await supabase
+            const { error } = await supabase
                 .from("resumes")
-                .update({
-                    name: name,
-                    category: category,
-                    labels: labels,
-                })
+                .update({ category, labels })
                 .eq("id", resume.id);
 
-            if (updateError) throw updateError;
+            if (error) {
+                setError(error.message);
+                return;
+            }
 
-            // Update store
-            updateResume(resume.id, {
-                name,
-                category,
-                labels,
-            });
-
-            onSave();
+            // Update the store
+            updateResume(resume.id, { category, labels });
+            
+            showAlert('Changes saved successfully', 'success');
             onClose();
-        } catch (err) {
-            showAlert("Failed to update resume", 'error');
+            onSave();
+        } catch (error) {
+            setError("An unexpected error occurred");
         } finally {
             setLoading(false);
         }
-    };
+    }
 
     return (
         <Transition appear show={open} as={Fragment}>
@@ -108,6 +106,7 @@ export default function EditResumeModal({ open, onClose, resume, onSave }: EditR
                                     Edit Resume
                                 </Dialog.Title>
 
+                                {error && <div className="bg-red-100 text-red-700 px-3 py-2 rounded mb-2 text-sm text-center">{error}</div>}
                                 <div className="mb-4">
                                     <CustomCombobox
                                         label="Category"

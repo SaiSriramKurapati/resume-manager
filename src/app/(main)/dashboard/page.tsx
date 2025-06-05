@@ -26,10 +26,8 @@ export default function Dashboard() {
     const [deleteLoading, setDeleteLoading] = useState(false);
     const { showAlert } = useAlert();
 
-    const { data: resumes, isLoading } = useStore((state) => ({
-        data: state.resumes,
-        isLoading: state.isLoading
-    }));
+    const resumes = useStore((state) => state.resumes);
+    const isLoading = useStore((state) => state.isLoading);
     const fetchResumes = useStore((state) => state.fetchResumes);
     const deleteResume = useStore((state) => state.deleteResume);
 

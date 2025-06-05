@@ -7,16 +7,16 @@ import { useStore } from '@/store/useStore';
 // This layout includes the Header
 export default function MainLayout({ children }: { children: React.ReactNode }) {
     const fetchResumes = useStore((state) => state.fetchResumes);
-    const fetchProfile = useStore((state) => state.fetchProfile);
+    const fetchProfile = useStore(state => state.fetchProfile);
 
     // Fetch resumes when this layout mounts (only for pages within (main))
     useEffect(() => {
         fetchResumes();
-    }, [fetchResumes]);
+    }, [fetchResumes()]);
 
     useEffect(() => {
         fetchProfile();
-    }, [fetchProfile]);
+    }, [fetchProfile()]);
 
     return (
         <>

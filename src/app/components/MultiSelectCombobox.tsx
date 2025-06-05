@@ -17,12 +17,29 @@ interface MultiSelectComboboxProps {
 export default function MultiSelectCombobox({ items, value, onChange, placeholder, label, disabled, maxItems, allowCreate = false }: MultiSelectComboboxProps) {
   const [query, setQuery] = useState('');
   const { showAlert } = useAlert(); // Access showAlert function
-  const [selectedItems, setSelectedItems] = useState<string[]>(value);
+  const [isCreating, setIsCreating] = useState(false);
 
   // Filter items based on query and exclude already selected items from the main list
   const filteredItems = query === ''
     ? items.filter(item => !value.includes(item))
     : items.filter(item => !value.includes(item) && item.toLowerCase().includes(query.toLowerCase()));
+
+  // Handle creating a new item
+  const handleCreate = () => {
+    if (query.trim() === '') return;
+    
+    // Check if adding more items would exceed the limit
+    if (maxItems !== undefined && value.length >= maxItems) {
+      showAlert(`Maximum ${maxItems} labels allowed.`, 'warning');
+      return;
+    }
+
+    // Add the new item to the selection
+    const newValue = [...value, query.trim()];
+    onChange(newValue);
+    setQuery('');
+    setIsCreating(false);
+  };
 
   // Correctly handle the array of selected items from Headless UI
   const handleHeadlessSelect = (selectedItems: string[]) => {
@@ -33,6 +50,7 @@ export default function MultiSelectCombobox({ items, value, onChange, placeholde
     }
     onChange(selectedItems);
     setQuery(''); // Clear query after selection
+    setIsCreating(false);
   };
 
   return (
@@ -103,11 +121,7 @@ export default function MultiSelectCombobox({ items, value, onChange, placeholde
                   )
                 }
               >
-                <span
-                  className={clsx('block truncate', active ? 'font-medium' : 'font-normal')}
-                >
-                  Create &quot;{query}&quot;
-                </span>
+                Create "{query}"
               </Combobox.Option>
             )}
             {filteredItems.length === 0 ? (

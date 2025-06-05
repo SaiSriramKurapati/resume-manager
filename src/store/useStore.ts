@@ -26,6 +26,7 @@ interface StoreState {
     error: string | null;
     profile: Profile | null;
 
+
     // Actions
     fetchResumes: () => Promise<void>;
     addResume: (resume: Resume) => void;
@@ -35,7 +36,7 @@ interface StoreState {
     fetchProfile: () => Promise<void>;
 }
 
-const storeCreator: StateCreator<StoreState> = (set, get) => ({
+const storeCreator: StateCreator<StoreState> = (set) => ({
     // Initial State
     resumes: [],
     uniqueLabels: [],
