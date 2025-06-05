@@ -79,14 +79,14 @@ export default function LoginForm({ onLoginSuccess, onToggleView }: LoginFormPro
             </div>
 
              <div className="text-center text-sm">
-                <p className="text-text-secondary">
-                    Don't have an account?{' '}
+                <p className="text-sm text-text-tertiary mt-2">
+                    Don&apos;t have an account?{' '}
                     <button
-                        className="font-medium text-blue-600 hover:text-blue-500 cursor-pointer"
+                        type="button"
                         onClick={onToggleView}
-                        type="button" // Prevent form submission
+                        className="text-blue-500 hover:text-blue-600 font-medium"
                     >
-                        Sign Up
+                        Sign up
                     </button>
                 </p>
             </div>
