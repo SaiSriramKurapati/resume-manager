@@ -72,10 +72,10 @@ export default function AuthContainer() {
                     </p>
 
                     <div className='flex justify-center gap-4'>
-                    <Button variant="secondary" onClick={handleResendVerification} disabled={resending}>
+                    <Button variant="primary" onClick={handleResendVerification} disabled={resending}>
                     {resending ? 'Resending...' : 'Resend Verification Link'}
                 </Button>
-                    <Button variant="secondary" onClick={handleGoToLogin}>Go to Login</Button>
+                    <Button variant="primary" onClick={handleGoToLogin}>Go to Login</Button>
                     </div>
                 </div>
             ) : view === 'login' ? (
