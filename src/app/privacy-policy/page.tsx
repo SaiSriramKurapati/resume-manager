@@ -27,7 +27,7 @@ export default function PrivacyPolicyPage() {
                 <p>
                     Welcome to ResumeManager! This Privacy Policy explains how we
                     collect, use, disclose, and safeguard your information when you
-                    use our website and Chrome Extension (collectively, the "Service").
+                    use our website and Chrome Extension (collectively, the &quot;Service&quot;).
                     Please read this privacy policy carefully. If you do not agree with
                     the terms of this privacy policy, please do not access the service.
                 </p>
