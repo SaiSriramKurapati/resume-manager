@@ -1,0 +1,2 @@
+(function(){(function(){let s=!1;const o=()=>{for(const e of Object.keys(localStorage))if(e.startsWith("sb-")&&e.endsWith("-auth-token"))return e;return null},n=()=>{const e=o();if(e&&!s)try{const t=JSON.parse(localStorage.getItem(e));t&&(chrome.runtime.sendMessage({type:"SESSION_UPDATED",session:t}),s=!0)}catch(t){console.error("Resume Manager: Error parsing session data.",t)}else!e&&s&&(chrome.runtime.sendMessage({type:"SESSION_LOGGED_OUT"}),s=!1)};n(),setInterval(n,2e3)})();
+})()
