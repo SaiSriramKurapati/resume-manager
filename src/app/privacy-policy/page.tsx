@@ -40,7 +40,7 @@ export default function PrivacyPolicyPage() {
                         <strong>Personal Data:</strong> Personally identifiable information, such as your username and email address, that you voluntarily give to us when you register with the Service.
                         </li>
                         <li>
-                        <strong>Resume Data:</strong> We store the resumes you upload, including the file itself and any associated metadata like category and labels you provide, in order to provide the Service's core functionality.
+                        <strong>Resume Data:</strong> We store the resumes you upload, including the file itself and any associated metadata like category and labels you provide, in order to provide the Service&apos;s core functionality.
                         </li>
                         <li>
                         <strong>Usage Data:</strong> Information our servers automatically collect when you access the website, such as your IP address, browser type, and operating system. The Chrome Extension does not collect this data, but our website does for security and analytics.
