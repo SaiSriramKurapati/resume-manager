@@ -1,6 +1,3 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
-
 interface Resume {
   id: string;
   name: string;
@@ -10,37 +7,18 @@ interface Resume {
   created_at: string;
 }
 
-export default function ResumeList({ selectedResume, setSelectedResume }: {
+export default function ResumeList({ resumes, loading, selectedResume, setSelectedResume }: {
+  resumes: Resume[];
+  loading: boolean;
   selectedResume: Resume | null;
   setSelectedResume: (resume: Resume) => void;
 }) {
-  const [resumes, setResumes] = useState<Resume[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchResumes();
-  }, []);
-
-  const fetchResumes = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('resumes')
-        .select('id, name, file_url, category, labels, created_at')
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      setResumes(data || []);
-    } catch (error) {
-      console.error('Error fetching resumes:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) return <div className="text-center py-4">Loading resumes...</div>;
-  if (resumes.length === 0) return <div className="text-center py-4">No resumes found</div>;
+  if (resumes.length === 0) return <div className="text-center py-4">No resumes found matching your search.</div>;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 max-h-80 overflow-y-auto px-2 py-1">
       {resumes.map((resume) => (
         <div
           key={resume.id}

@@ -14,7 +14,7 @@ export default defineManifest({
     type: 'module',
   },
   externally_connectable: {
-    matches: ['http://localhost:3001/*']
+    matches: ['http://localhost:3001/*', 'https://www.resumemanager.app/*']
   },
   content_scripts: [
     {
@@ -30,7 +30,7 @@ export default defineManifest({
       js: ['src/contentScript.tsx']
     },
     {
-      matches: ['http://localhost:3001/*'],
+      matches: ['http://localhost:3001/*', 'https://www.resumemanager.app/*'],
       js: ['src/contentScriptMainApp.js']
     }
   ],

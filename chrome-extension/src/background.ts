@@ -1,8 +1,12 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'SESSION_UPDATED') {
-    // Handle session updates
-    console.log('Session updated:', message.session);
+    chrome.storage.local.set({ supabaseSession: message.session });
     return; // Synchronous, no response needed.
+  }
+
+  if (message.type === 'SESSION_LOGGED_OUT') {
+    chrome.storage.local.remove('supabaseSession');
+    return;
   }
 
   if (message.type === 'FORWARD_TO_CONTENT_SCRIPT') {

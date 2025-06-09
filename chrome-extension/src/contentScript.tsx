@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client';
 import ResumeManagerRoot from './popup/ResumeManagerRoot';
 import tailwindStyles from './styles/tailwind.css?inline';
 
-console.log('Content script loaded');
+// console.log('Content script loaded');
 
 const container = document.createElement('div');
 container.id = 'resume-manager-floating-ui';
@@ -152,7 +152,8 @@ chrome.runtime.onMessage.addListener((message, _unused, sendResponse) => {
         try {
           sendResponse({ status: 'failed', error: (error as Error).message });
         } catch (err) {
-          console.warn('sendResponse failed silently', err);
+          // This warning can be noisy. It's better to rely on the outer error log.
+          // console.warn('sendResponse failed silently', err);
         }
       }
     }, 0);

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabaseClient';
 import LoginButton from '../components/LoginButton';
 import ResumeList from '../components/ResumeList';
 
@@ -14,7 +15,6 @@ interface Resume {
 interface FloatingUIProps {
   onClose: () => void;
   session: any;
-  onAutoFill?: (resume: Resume) => void;
   isAutofillSupported: boolean;
   isObserverActive: boolean;
 }
@@ -23,6 +23,51 @@ export default function FloatingUI({ session, onClose, isAutofillSupported, isOb
   const [selectedResume, setSelectedResume] = useState<Resume | null>(null);
   const [isAutoFilling, setIsAutoFilling] = useState(false);
   const [autoFillStatus, setAutoFillStatus] = useState('');
+
+  // New state for search and filtering
+  const [allResumes, setAllResumes] = useState<Resume[]>([]);
+  const [visibleResumes, setVisibleResumes] = useState<Resume[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  // Effect to fetch all resumes once
+  useEffect(() => {
+    if (session) {
+      const fetchResumes = async () => {
+        try {
+          const { data, error } = await supabase
+            .from('resumes')
+            .select('id, name, file_url, category, labels, created_at')
+            .order('created_at', { ascending: false });
+          if (error) throw error;
+          setAllResumes(data || []);
+        } catch (error) {
+          console.error('Error fetching resumes:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchResumes();
+    } else {
+      setLoading(false);
+    }
+  }, [session]);
+
+  // Effect to filter resumes based on search term
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      // Show first 4 if no search term
+      setVisibleResumes(allResumes.slice(0, 4));
+    } else {
+      const lowercasedTerm = searchTerm.toLowerCase();
+      const filtered = allResumes.filter(resume =>
+        resume.name.toLowerCase().includes(lowercasedTerm) ||
+        resume.category.toLowerCase().includes(lowercasedTerm) ||
+        resume.labels.some(label => label.toLowerCase().includes(lowercasedTerm))
+      );
+      setVisibleResumes(filtered);
+    }
+  }, [searchTerm, allResumes]);
 
   const handleAutoFill = (resume: Resume) => {
     setIsAutoFilling(true);
@@ -36,8 +81,6 @@ export default function FloatingUI({ session, onClose, isAutofillSupported, isOb
       (response) => {
         if (chrome.runtime.lastError) {
           console.error('Error sending message to content script:', chrome.runtime.lastError.message);
-        } else {
-          console.log('Received response:', response);
         }
         setIsAutoFilling(false);
         if (response?.status === 'complete') setAutoFillStatus('Auto-fill complete!');
@@ -81,14 +124,33 @@ export default function FloatingUI({ session, onClose, isAutofillSupported, isOb
         <div className="space-y-4">
           <div className="border-t pt-4">
             <h2 className="font-semibold mb-2">Your Resumes</h2>
+            
+            {/* Search Input */}
+            <div className="relative mb-4">
+              <input
+                type="text"
+                placeholder="Search by name, category, or label..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+            </div>
+
             <ResumeList
+              resumes={visibleResumes}
+              loading={loading}
               selectedResume={selectedResume}
               setSelectedResume={setSelectedResume}
             />
             {isAutofillSupported && selectedResume && (
               <div className="mt-4 flex flex-col gap-1">
                 <button
-                  className="flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded shadow font-semibold transition-colors min-w-[120px] disabled:bg-gray-400"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2 rounded shadow font-semibold transition-all min-w-[120px] disabled:bg-gray-400 disabled:from-gray-400"
                   onClick={() => handleAutoFill(selectedResume)}
                   disabled={isAutoFilling}
                 >

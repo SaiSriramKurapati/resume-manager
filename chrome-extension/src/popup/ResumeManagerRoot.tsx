@@ -2,15 +2,6 @@ import { useEffect, useState } from 'react';
 import FloatingUI from './FloatingUI';
 import { supabase } from '../lib/supabaseClient';
 
-interface Resume {
-  id: string;
-  name: string;
-  file_url: string;
-  category: string;
-  labels: string[];
-  created_at: string;
-}
-
 interface ResumeManagerRootProps {
   isAutofillSupported: boolean;
   isObserverActive: boolean;
@@ -22,13 +13,35 @@ export default function ResumeManagerRoot({ isAutofillSupported, isObserverActiv
     const [session, setSession] = useState<any>(null);
 
     useEffect(() => {
-        chrome.storage.local.get('supabaseSession', ({ supabaseSession }) => {  
-          setSession(supabaseSession || null);
-        });
+        const checkSession = async () => {
+            const { data: { session: localSession } } = await supabase.auth.getSession();
+            
+            if (localSession) {
+                // We have a session in storage. Let's verify it with the server.
+                const { data: { user }, error } = await supabase.auth.getUser();
+
+                if (error || !user) {
+                    // Session is invalid/expired. Clean up.
+                    setSession(null);
+                    chrome.storage.local.remove('supabaseSession');
+                } else {
+                    // Session is valid.
+                    setSession(localSession);
+                }
+            } else {
+                // No session found.
+                setSession(null);
+            }
+        };
+
+        checkSession();
         
         const handleStorageChange = (changes: { [key: string]: chrome.storage.StorageChange }, area: string) => {
-          if (area === 'local' && changes.supabaseSession) {
-            setSession(changes.supabaseSession.newValue || null);
+          if (area === 'local' && 'supabaseSession' in changes) {
+            // This key has been changed (either updated or removed).
+            // We get the new value, which will be undefined if it was removed.
+            const newSession = changes.supabaseSession.newValue || null;
+            setSession(newSession);
           }
         };
     
@@ -65,13 +78,26 @@ export default function ResumeManagerRoot({ isAutofillSupported, isObserverActiv
         setShowTab(false);
     }
 
-    const handleAutoFill = (resume: Resume) => {
-        console.log('Auto filling resume:', resume);
-    }
+    // This effect listens for direct messages to update the UI instantly,
+    // providing a fallback for when the background service worker is inactive.
+    useEffect(() => {
+        const handleMessage = (message: any) => {
+            if (message.type === 'SESSION_UPDATED') {
+                setSession(message.session);
+            }
+            if (message.type === 'SESSION_LOGGED_OUT') {
+                setSession(null);
+            }
+        };
+        chrome.runtime.onMessage.addListener(handleMessage);
+        return () => {
+            chrome.runtime.onMessage.removeListener(handleMessage);
+        };
+    }, []);
 
     return (
         <>
-          {showFloatingUI && <FloatingUI session={session} onClose={handleCloseFloatingUI} onAutoFill={handleAutoFill} isAutofillSupported={isAutofillSupported} isObserverActive={isObserverActive} />}
+          {showFloatingUI && <FloatingUI session={session} onClose={handleCloseFloatingUI} isAutofillSupported={isAutofillSupported} isObserverActive={isObserverActive} />}
           {showTab && (
             <div className="fixed top-1/2 right-0 z-[9999] flex flex-col items-end">
               <div className="relative">

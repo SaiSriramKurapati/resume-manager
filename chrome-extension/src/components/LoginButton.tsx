@@ -1,8 +1,7 @@
-
 export default function LoginButton() {
   
   const handleLogin = () => {
-    window.open('http://localhost:3001/login', '_blank');
+    window.open('https://www.resumemanager.app/login', '_blank');
   };
 
   return (

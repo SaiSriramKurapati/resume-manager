@@ -16,13 +16,14 @@
   },
   "externally_connectable": {
     "matches": [
-      "http://localhost:3001/*"
+      "http://localhost:3001/*",
+      "https://www.resumemanager.app/*"
     ]
   },
   "content_scripts": [
     {
       "js": [
-        "assets/contentScript.tsx-IGfbz0k_.js"
+        "assets/contentScript.tsx-CmjWbMvj.js"
       ],
       "matches": [
         "*://*/*jobs*",
@@ -36,10 +37,11 @@
     },
     {
       "js": [
-        "assets/contentScriptMainApp.js-ddKUobp4.js"
+        "assets/contentScriptMainApp.js-JBjBtrrt.js"
       ],
       "matches": [
-        "http://localhost:3001/*"
+        "http://localhost:3001/*",
+        "https://www.resumemanager.app/*"
       ]
     }
   ],
@@ -55,16 +57,17 @@
         "*://jobs.lever.co/*"
       ],
       "resources": [
-        "assets/contentScript.tsx-IGfbz0k_.js"
+        "assets/contentScript.tsx-CmjWbMvj.js"
       ],
       "use_dynamic_url": false
     },
     {
       "matches": [
-        "http://localhost:3001/*"
+        "http://localhost:3001/*",
+        "https://www.resumemanager.app/*"
       ],
       "resources": [
-        "assets/contentScriptMainApp.js-ddKUobp4.js"
+        "assets/contentScriptMainApp.js-JBjBtrrt.js"
       ],
       "use_dynamic_url": false
     }
