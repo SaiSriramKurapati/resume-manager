@@ -15,6 +15,7 @@ export default function Header() {
     const handleLogout = async () => {
         await supabase.auth.signOut();
         window.location.href = "/login";
+        window.dispatchEvent(new CustomEvent('supabase-session', { detail: null }));
     };
 
     const isActive = (path: string) => pathname === path;

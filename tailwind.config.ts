@@ -2,9 +2,8 @@ import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    './chrome-extension/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -15,7 +14,10 @@ const config: Config = {
           tertiary: '#6B7280',   // Light gray for tertiary text
           muted: '#9CA3AF',      // Muted text
           inverse: '#F9FAFB',    // Light text for dark backgrounds
-        }
+        },
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+        },
       }
     },
   },

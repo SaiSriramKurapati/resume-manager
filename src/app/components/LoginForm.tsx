@@ -33,6 +33,10 @@ export default function LoginForm({ onLoginSuccess, onToggleView }: LoginFormPro
             showAlert('Logged in successfully!', 'success');
             onLoginSuccess(); // Call the success callback
 
+            // Store the session in local storage
+            const { data} = await supabase.auth.getSession();
+            window.dispatchEvent(new CustomEvent('supabase-session', { detail: data.session }));
+
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'An error occurred during login.';
             showAlert(errorMessage, 'error');
