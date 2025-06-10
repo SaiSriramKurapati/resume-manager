@@ -1,0 +1,75 @@
+{
+  "manifest_version": 3,
+  "name": "Resume Manager",
+  "version": "1.0.0",
+  "description": "Manage your resumes for job applications",
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "action": {
+    "default_title": "Resume Manager"
+  },
+  "background": {
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
+  },
+  "externally_connectable": {
+    "matches": [
+      "http://localhost:3001/*",
+      "https://www.resumemanager.app/*"
+    ]
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "assets/contentScript.tsx-CmjWbMvj.js"
+      ],
+      "matches": [
+        "*://*/*jobs*",
+        "*://*/*careers*",
+        "*://*/*job*",
+        "*://*/*career*",
+        "*://jobs.ashbyhq.com/*",
+        "*://boards.greenhouse.io/*",
+        "*://jobs.lever.co/*"
+      ]
+    },
+    {
+      "js": [
+        "assets/contentScriptMainApp.js-JBjBtrrt.js"
+      ],
+      "matches": [
+        "http://localhost:3001/*",
+        "https://www.resumemanager.app/*"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "*://*/*",
+        "*://*/*",
+        "*://*/*",
+        "*://*/*",
+        "*://boards.greenhouse.io/*",
+        "*://jobs.ashbyhq.com/*",
+        "*://jobs.lever.co/*"
+      ],
+      "resources": [
+        "assets/contentScript.tsx-CmjWbMvj.js"
+      ],
+      "use_dynamic_url": false
+    },
+    {
+      "matches": [
+        "http://localhost:3001/*",
+        "https://www.resumemanager.app/*"
+      ],
+      "resources": [
+        "assets/contentScriptMainApp.js-JBjBtrrt.js"
+      ],
+      "use_dynamic_url": false
+    }
+  ]
+}
